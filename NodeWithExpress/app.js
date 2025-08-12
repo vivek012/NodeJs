@@ -27,7 +27,7 @@ app.use((req , res , next)=>{
 
 
 const qs = require("qs");
-app.set("query parser", (str) => qs.parse(str)); // Override query parser
+app.set("query parser", (str) => qs.parse(str));
 
 // ROUTE HANDLER FUNCTION **********************************
 
