@@ -15,6 +15,8 @@ class ApiFeatures{
         return this; 
     }
 
+    
+
     sort(){
          if (this.queryStr.sort) {
             const sortBy = this.queryStr.sort.split(',').join(' ')
@@ -55,3 +57,4 @@ class ApiFeatures{
     }
 
 }
+module.exports = ApiFeatures;
