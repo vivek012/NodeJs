@@ -7,10 +7,13 @@ const router = express.Router()
 
 router.route('/highest-rated').get(moviesController.getHighestRatedMovies, moviesController.getAllMovies)
 
+router.route('/movies-stats').get(moviesController.getMovieStats)
+
+router.route('/movies-by-genre/:genre').get(moviesController.getMoviesByGenre)
+
 router.route('/')
     .get(moviesController.getAllMovies)
     .post( moviesController.createMovie)
-
 
 router.route('/:id')
     .get(moviesController.getMovies)
