@@ -1,5 +1,6 @@
 const mongoose = require("mongoose")
 const fs = require('fs')
+const validator = require('validator')
 
 const movieSchema = new mongoose.Schema({
     name : {
@@ -8,7 +9,8 @@ const movieSchema = new mongoose.Schema({
         unique: true,
         maxlength: [100,"Moview name must not have more than 100 characters"],
         minlength: [4, "movie name must have at least 4 characters"],
-        trim: true
+        trim: true,
+        // validate :[validator.isAlpha, "name should only contain alphabets."]
     }, 
     description:  {
         type : String, 
@@ -21,6 +23,12 @@ const movieSchema = new mongoose.Schema({
     },
     ratings: {
         type:Number,
+        validate: {
+          validator : function(value){
+           return  value>=1 && value<=10;
+        },
+        message : "Ratings ({VALUE})should be above 1.0 and below 10"  
+        } 
     },
     totalRating:{
         type: Number
@@ -39,7 +47,11 @@ const movieSchema = new mongoose.Schema({
     },
     genres:{
         type:[String],
-        required: [true, 'Directors is required field!']
+        required: [true, 'Directors is required field!'],
+        enum: {
+           values: ["Action", "Adventure", "sci-Fi", "Thriller", "Crime", "Drama", "Comedy", "Romance" ,"Biography"],
+            message: "this genres does not does not exit"
+        }
     },
     actors:{
         type: [String],
@@ -87,7 +99,7 @@ movieSchema.post(/^find/, function(docs, next){
     this.find({releaseDate: {$lte: Date.now()}})
     this.endTime = Date.now();
 
-    const content = `Query too ${this.endTime - this.startTime} milliseconds to fetch document`
+    const content = `Query too ${this.endTime - this.startTime} milliseconds to fetch document\n`
     fs.writeFileSync('./Log/log.txt',content , {flag: 'a'}, (err)=>{
         console.log(err.message);
     } )

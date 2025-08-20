@@ -2,6 +2,8 @@
 const express = require('express')
 const movieRouter = require('./Routes/moviesRoutes')
 const morgan = require("morgan")
+const CustomError = require('./Utils/CustomError')
+const globalErrorHandler = require('./Controllers/ErrorController')
 
 let app = express();
 
@@ -39,5 +41,21 @@ app.set("query parser", (str) => qs.parse(str));
 
 // USING THE ROUTES***************************
 app.use('/api/v1/movies', movieRouter)
+app.use((req, res , next)=>{
+    // res.status(404).json({
+    //     status: 'fail',
+    //     message: `Can't find ${req.originalUrl} on the server`
+    // })
+// const err = new Error(`Can't find ${req.originalUrl} on the server`);
+// err.status = 'fail';
+// err.statusCode = 404; 
+
+
+    const err = new CustomError(`Can't find ${req.originalUrl} on the server`,404)
+
+    next(err);
+})
+
+app.use(globalErrorHandler)
 
 module.exports = app;

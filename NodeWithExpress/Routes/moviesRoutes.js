@@ -13,7 +13,7 @@ router.route('/movies-by-genre/:genre').get(moviesController.getMoviesByGenre)
 
 router.route('/')
     .get(moviesController.getAllMovies)
-    .post( moviesController.createMovie)
+    .post(moviesController.createMovie)
 
 router.route('/:id')
     .get(moviesController.getMovies)

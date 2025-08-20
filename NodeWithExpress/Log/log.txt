@@ -3,4 +3,5 @@ A new movie document with name test1 has been created by VivekKUMAR
  A new movie document with name test4 has been created by VivekKUMAR
  A new movie document with name sample has been created by VivekKUMAR
  A new movie document with name sample2 has been created by VivekKUMAR
- Query too 361 milliseconds to fetch document Query too 93 milliseconds to fetch documentQuery too 49 milliseconds to fetch documentQuery too 96 milliseconds to fetch documentQuery too 108 milliseconds to fetch documentQuery too 72 milliseconds to fetch document
+ Query too 361 milliseconds to fetch document Query too 93 milliseconds to fetch documentQuery too 49 milliseconds to fetch documentQuery too 96 milliseconds to fetch documentQuery too 108 milliseconds to fetch documentQuery too 72 milliseconds to fetch documentQuery too 265 milliseconds to fetch documentQuery too 97 milliseconds to fetch documentQuery too 173 milliseconds to fetch documentQuery too 3732 milliseconds to fetch documentQuery too 64 milliseconds to fetch document
+Query too 110 milliseconds to fetch document
