@@ -2,6 +2,7 @@
 const Movie = require("./../Models/movieModel")
 const ApiFeatures = require('../Utils/ApiFeatures')
 const asyncErrorHandler = require('./../Utils/asyncErrorHandler')
+const CustomError = require('./../Utils/CustomError')
 
 
 // exports.validateBody = (req, res, next) => {
@@ -39,8 +40,8 @@ exports.getHighestRatedMovies = async (req, res, next) => {
     }
 };
 
-exports.getAllMovies = async (req, res, next) => {
-    try {
+exports.getAllMovies = asyncErrorHandler(async (req, res, next) => {
+
         const features = new ApiFeatures(Movie.find(), req.query)
             .filter()
             .sort()
@@ -72,20 +73,18 @@ exports.getAllMovies = async (req, res, next) => {
             }
         })
 
-    } catch (err) {
-        res.status(404).json({
-            status: "fail",
-            message: err.message
-        })
-
-    }
-}
+    })
 
 
 exports.getMovies = asyncErrorHandler(async (req, res, next) => {
-
+    console.log(x)
         //  const movies = await Movie.find({_id: req.params.id});
         const movie = await Movie.findById(req.params.id);
+
+        if(!movie){
+            const error = new CustomError("Movie with that ID is not Found", 404)
+            return next(error);
+        }
 
         res.status(200).json({
             status: "success",
@@ -114,6 +113,11 @@ exports.createMovie = asyncErrorHandler(async (req, res,next) => {
 exports.updateMovie = asyncErrorHandler(async (req, res, next) => {
         const updatedmovie = await Movie.findByIdAndUpdate(req.params.id, req.body, { new: true, runValidators: true })
 
+         if(!updatedmovie){
+            const error = new CustomError("Movie with that ID is not Found", 404)
+            return next(error);
+        }
+
         res.status(200).json({
             status: 'success',
             data: {
@@ -128,7 +132,12 @@ exports.updateMovie = asyncErrorHandler(async (req, res, next) => {
 
 exports.deleteMovie = asyncErrorHandler(async (req, res, next) => {
 
-        await Movie.findByIdAndDelete(req.params.id)
+       const deletedMovie =  await Movie.findByIdAndDelete(req.params.id)
+
+        if(!deletedMovie){
+            const error = new CustomError("Movie with that ID is not Found", 404)
+            return next(error);
+        }
 
         res.status(204).json({
             status: 'success',

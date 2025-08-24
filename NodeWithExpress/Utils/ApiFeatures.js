@@ -73,8 +73,7 @@ class ApiFeatures{
     }
     
     filter(){
-        console.log('FILTER LOGIC *****************************');
-
+       
         let queryStr ={ ...this.queryStr };
         delete queryStr.sort;
         delete queryStr.fields;

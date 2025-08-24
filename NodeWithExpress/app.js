@@ -12,10 +12,11 @@ const logger = function (req, res, next){
     next();
 }
 
-app.use(express.json());      
+app.use(express.json());   
+// console.log(process.env)   
 
 
-if (process.env.NODE_ENV === 'development') {
+if (process.env.NODE_ENV === 'development'){
      app.use(morgan('dev'))
    console.log('App is running in development mode');
 }
@@ -49,13 +50,10 @@ app.use((req, res , next)=>{
 // const err = new Error(`Can't find ${req.originalUrl} on the server`);
 // err.status = 'fail';
 // err.statusCode = 404; 
-
-
     const err = new CustomError(`Can't find ${req.originalUrl} on the server`,404)
 
     next(err);
 })
 
 app.use(globalErrorHandler)
-
 module.exports = app;
