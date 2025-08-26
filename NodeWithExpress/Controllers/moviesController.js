@@ -1,4 +1,3 @@
-
 const Movie = require("./../Models/movieModel")
 const ApiFeatures = require('../Utils/ApiFeatures')
 const asyncErrorHandler = require('./../Utils/asyncErrorHandler')

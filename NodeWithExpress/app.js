@@ -1,7 +1,8 @@
 // IMPORT PACKAGE 
 const express = require('express')
-const movieRouter = require('./Routes/moviesRoutes')
 const morgan = require("morgan")
+const movieRouter = require('./Routes/moviesRoutes')
+const authRouter = require('./Routes/authRouter')
 const CustomError = require('./Utils/CustomError')
 const globalErrorHandler = require('./Controllers/ErrorController')
 
@@ -10,7 +11,7 @@ let app = express();
 const logger = function (req, res, next){
     console.log("custom middleware called");
     next();
-}
+} 
 
 app.use(express.json());   
 // console.log(process.env)   
@@ -41,7 +42,10 @@ app.set("query parser", (str) => qs.parse(str));
 // app.delete('/api/v1/movies/:id', deleteMovie)
 
 // USING THE ROUTES***************************
-app.use('/api/v1/movies', movieRouter)
+app.use('/api/v1/movies', movieRouter);
+app.use('/api/v1/users', authRouter);
+
+
 app.use((req, res , next)=>{
     // res.status(404).json({
     //     status: 'fail',
