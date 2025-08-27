@@ -45,7 +45,7 @@ userSchema.pre('save', async function(next){
     next();
 })
 
-userSchema.method.comparePasswordInDb = async function(pswd, pswdDB){
+userSchema.methods.comparePasswordInDb = async function(pswd, pswdDB){
     return await bcrypt.compare(pswd, pswdDB)
 }
 

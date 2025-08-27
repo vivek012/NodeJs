@@ -2,6 +2,7 @@ const User = require('./../Models/usermodel');
 const asyncErrorHandler = require('./../Utils/asyncErrorHandler')
 const jwt = require('jsonwebtoken')
 const CustomError = require('./../Utils/CustomError')
+const util = require('util')
 
 const signToken = id =>{
     return jwt.sign({ id }, process.env.SECRET_STR, {
@@ -25,7 +26,7 @@ exports.signup = asyncErrorHandler(async (req, res, next) => {
 
 exports.login = asyncErrorHandler(async (req, res, next) => {
     const email = req.body.email;
-    const password = req.body.email;
+    const password = req.body.password;
 
     // const {email , password} = req.body;
     if (!email || !password) {
@@ -49,7 +50,31 @@ exports.login = asyncErrorHandler(async (req, res, next) => {
 
     res.status(200).json({
         status: 'success',
-        token,
-        user
+        token
     })
+})
+
+exports.protect = asyncErrorHandler(async (req, res, next)=>{
+    //1. Read the token & check if it exist
+    const testToken = req.headers.authorization
+
+    let token
+    if(testToken && testToken.startsWith('bearer')){
+    token =  testToken.split(' ')[1]
+    }
+    
+    if(!token){
+        next(new CustomError('You are not logged in!', 401))
+    }
+    
+    //2. Validate the token
+
+    const decodedToken = await util.promisify(jwt.verify)(token, process.env.SECRET_STR );
+
+    console.log(decodedToken)
+    //3. Read the token & check if it exist
+    //4. Read the token & check if it exist
+
+    next();  
+
 })
