@@ -14,7 +14,7 @@ router.route('/movies-by-genre/:genre').get(moviesController.getMoviesByGenre)
 
 router.route('/')
     .get(authController.protect, moviesController.getAllMovies)
-    .post(moviesController.createMovie)
+    .post(authController.protect,  authController.restrict('admin'), moviesController.createMovie)
 
 router.route('/:id')
     .get(moviesController.getMovies)
