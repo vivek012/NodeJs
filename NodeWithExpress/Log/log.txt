@@ -27,3 +27,11 @@ Query too 127 milliseconds to fetch document
 Query too 94 milliseconds to fetch document
 Query too 104 milliseconds to fetch document
 Query too 104 milliseconds to fetch document
+Query too 127 milliseconds to fetch document
+Query too 110 milliseconds to fetch document
+Query too 65 milliseconds to fetch document
+Query too 91 milliseconds to fetch document
+Query too 78 milliseconds to fetch document
+Query too 72 milliseconds to fetch document
+Query too 76 milliseconds to fetch document
+Query too 70 milliseconds to fetch document
