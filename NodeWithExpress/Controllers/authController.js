@@ -12,18 +12,22 @@ const signToken = id => {
     })
 }
 
-exports.signup = asyncErrorHandler(async (req, res, next) => {
-    const newUser = await User.create(req.body)
+const createSendResponse= (user, statusCode, res)=>{
+     const token = signToken(user._id)
 
-    const token = signToken(newUser._id)
-
-    res.status(200).json({
+    res.status(statusCode).json({
         status: 'success',
         token,
         data: {
-            user: newUser
+            user
         }
     })
+}
+
+exports.signup = asyncErrorHandler(async (req, res, next) => {
+    const newUser = await User.create(req.body)
+    createSendResponse(newUser, 201,res);
+ 
 })
 
 exports.login = asyncErrorHandler(async (req, res, next) => {
@@ -47,13 +51,8 @@ exports.login = asyncErrorHandler(async (req, res, next) => {
         return next(error)
     }
 
-    const token = signToken(user._id)
+     createSendResponse(user, 200,res);
 
-
-    res.status(200).json({
-        status: 'success',
-        token
-    })
 })
 
 exports.protect = asyncErrorHandler(async (req, res, next) => {
@@ -144,7 +143,7 @@ exports.forgetPassword = asyncErrorHandler(async (req, res, next) => {
 
     res.status(200).json({
         status: 'success',
-        
+
     })
 })
 
@@ -156,8 +155,8 @@ exports.resetPassword = asyncErrorHandler(async (req, res, next) => {
         passwordResetTokenExpire: { $gt: Date.now() }
     });
     if (!user) {
-       const error = new CustomError('Token is invalid or has expired', 400)
-       return next(error)
+        const error = new CustomError('Token is invalid or has expired', 400)
+        return next(error)
     }
 
     // 2. RESETING THE USER PASSWORD 
@@ -172,11 +171,8 @@ exports.resetPassword = asyncErrorHandler(async (req, res, next) => {
 
     // 3.lOGIN THE USER 
 
-     const loginToken = signToken(user._id)
+     createSendResponse(user, 200,res);
 
-
-    res.status(200).json({
-        status: 'success',
-        token: loginToken
-    })
+   
 })
+

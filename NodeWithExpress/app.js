@@ -3,6 +3,7 @@ const express = require('express')
 const morgan = require("morgan")
 const movieRouter = require('./Routes/moviesRoutes')
 const authRouter = require('./Routes/authRouter')
+const userRouter = require('./Routes/userRouter')
 const CustomError = require('./Utils/CustomError')
 const globalErrorHandler = require('./Controllers/ErrorController')
 
@@ -43,7 +44,8 @@ app.set("query parser", (str) => qs.parse(str));
 
 // USING THE ROUTES***************************
 app.use('/api/v1/movies', movieRouter);
-app.use('/api/v1/users', authRouter);
+app.use('/api/v1/auth', authRouter);
+app.use('/api/v1/user', userRouter);
 
 
 app.use((req, res , next)=>{
