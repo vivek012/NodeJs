@@ -1,6 +1,11 @@
 // IMPORT PACKAGE 
 const express = require('express')
 const morgan = require("morgan")
+const rateLimit = require('express-rate-limit');
+const helmet = require('helmet')
+const sanitize = require('express-mongo-sanitize')
+const xss = require('xss-clean')
+
 const movieRouter = require('./Routes/moviesRoutes')
 const authRouter = require('./Routes/authRouter')
 const userRouter = require('./Routes/userRouter')
@@ -9,12 +14,20 @@ const globalErrorHandler = require('./Controllers/ErrorController')
 
 let app = express();
 
-const logger = function (req, res, next){
-    console.log("custom middleware called");
-    next();
-} 
+app.use(helmet())
 
-app.use(express.json());   
+let limiter = rateLimit({
+    max: 500,
+    windowMs: 60*60 *1000,
+    message: "We have received too many  requests from this IP . Please try after one hour ."
+});
+
+app.use('/api', limiter)
+
+app.use(express.json({limit: '10kb'}));  
+
+app.use(sanitize());
+app.use(xss());
 // console.log(process.env)   
 
 
@@ -23,7 +36,9 @@ if (process.env.NODE_ENV === 'development'){
    console.log('App is running in development mode');
 }
 app.use(express.static('./public'))
-app.use(logger);
+
+
+
 
 app.use((req , res , next)=>{
     req.requestedAt = new Date().toISOString();

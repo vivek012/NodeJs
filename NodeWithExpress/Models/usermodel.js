@@ -39,6 +39,11 @@ const userSchema = new mongoose.Schema({
             message: 'Password & Confirm Password does not match'
         }
     },
+    active: {
+        type : Boolean,
+        default: true,
+        select: false
+    },
     passwordChangedAt  : Date,
     passwordResetToken: String,
     passwordResetTokenExpire: Date
@@ -52,6 +57,13 @@ userSchema.pre('save', async function(next){
 
     this.confirmPassword = undefined
     next();
+})
+
+userSchema.pre(/^find/, function(next){
+    //  this keyword in the function will point to current query
+         console.log("middleware called")
+        this.find({active: {$ne: false}})
+        next();
 })
 
 userSchema.methods.comparePasswordInDb = async function(pswd, pswdDB){

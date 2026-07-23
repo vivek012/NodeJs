@@ -8,6 +8,20 @@ const crypto = require('crypto')
 const authController = require('./../Controllers/authController')
 
 
+
+
+exports.getAllUsers = asyncErrorHandler(async (req, res, next)=>{
+    const users = await User.find();
+
+    res.status(200).json({
+        status: 'success',
+        result: users.length,
+        data: {
+            users
+        }
+    })
+})
+
 const filterReqObj = (obj, ...allowedFields)=>{
     const newObj = {};
     Object.keys(obj).forEach(prop=>{
@@ -48,8 +62,26 @@ exports.updateMe = asyncErrorHandler( async (req, res , next)=>{
 
     // UPDATE USER DETAIL 
     const filterObj = filterReqObj(req.body, 'name', 'email')
-    const upadateUser = await User.findByIdAndUpdate(req.user._id, filterObj, {runValidators: true, new: true})
+    const upadateUser = await User.findByIdAndUpdate(req.user.id, filterObj, {runValidators: true, new: true})
    
-    authController.createSendResponse(upadateUser, 200,res);
+
+     res.status(200).json({
+        status: 'success',
+        data: {
+            user: upadateUser
+
+        }
+     })
+    
    
 });
+
+exports.deleteMe = asyncErrorHandler(async (req, res, next)=>{
+     await User.findByIdAndUpdate(req.user.id, {active: false});
+
+     res.status(204).json({
+        status: 'success',
+        data: null
+     })
+    
+})

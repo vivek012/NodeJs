@@ -15,13 +15,27 @@ const signToken = id => {
 const createSendResponse= (user, statusCode, res)=>{
      const token = signToken(user._id)
 
+     const options = {
+        maxAge: process.env.LOGIN_EXPIRES,
+        httpOnly: true
+     }
+
+     if(process.env.NODE_ENV === 'production')
+        options.secure = true;
+     
+
+     res.cookie('jwt', token, options);
+
+
+     user.password = undefined;
+
     res.status(statusCode).json({
         status: 'success',
         token,
         data: {
             user
         }
-    })
+    })   
 }
 
 exports.signup = asyncErrorHandler(async (req, res, next) => {
@@ -72,7 +86,7 @@ exports.protect = asyncErrorHandler(async (req, res, next) => {
 
     const decodedToken = await util.promisify(jwt.verify)(token, process.env.SECRET_STR);
 
-    console.log(decodedToken)
+  
     //3. If the user exists
     const user = await User.findById(decodedToken.id)
 

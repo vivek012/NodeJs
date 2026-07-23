@@ -10,7 +10,7 @@ const devErrors = (res,error)=>{
     });
 }
 
-const castErrorHandler = (err)=>{
+const  castErrorHandler = (err)=>{
     const mssg = `Invalid value for ${err.path} :${err.value}`
     return new CustomError(mssg, 400)
 }
